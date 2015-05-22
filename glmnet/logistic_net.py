@@ -27,8 +27,10 @@ class LogisticNet(GlmNet):
 
     def fit(self, X, y, col_names=None,
             lambdas=None, weights=None, rel_penalties=None,
-            excl_preds=None, box_constraints=None, offsets=None):
+            excl_preds=None, box_constraints=None, offsets=None,
+            normalize=True,include_intercept=True):
         '''Fit a logistic or multinomial net model.
+
 
         Arguments:
 
@@ -174,6 +176,8 @@ class LogisticNet(GlmNet):
         self._validate_excl_preds(X, y, excl_preds)
         self._validate_box_constraints(X, y, box_constraints)
         self._validate_offsets(X, y, offsets)
+        normalize         = int(normalize)         # probably not necessary
+        include_intercept = int(include_intercept) # probably not necessary
         # Setup is complete, call the wrapper
         if not issparse(X):
             (self._out_n_lambdas,
@@ -198,7 +202,9 @@ class LogisticNet(GlmNet):
                                     self.frac_lg_lambda, 
                                     self.lambdas,
                                     self.threshold, 
-                                    nlam=self.n_lambdas
+                                    nlam=self.n_lambdas,
+                                    isd= normalize,
+                                    intr=include_intercept
                                 )
         else:
             X.sort_indices()
@@ -232,7 +238,9 @@ class LogisticNet(GlmNet):
                                     self.frac_lg_lambda, 
                                     self.lambdas,
                                     self.threshold, 
-                                    nlam=self.n_lambdas
+                                    nlam=self.n_lambdas,
+                                    isd= normalize,
+                                    intr=include_intercept
                                 )
         self._check_errors()
         # Keep some model metadata
