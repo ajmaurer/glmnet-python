@@ -24,7 +24,8 @@ class ElasticNet(GlmNet):
     # TODO: Implement offsets.
     def fit(self, X, y, col_names=None,
             lambdas=None, weights=None, rel_penalties=None,
-            excl_preds=None, box_constraints=None):
+            excl_preds=None, box_constraints=None,
+            normalize=True,include_intercept=True):
         '''Fit an elastic net model.
 
         Arguments: 
@@ -166,7 +167,10 @@ class ElasticNet(GlmNet):
                                      self.frac_lg_lambda, 
                                      self.lambdas, 
                                      self.threshold, 
-                                     nlam=self.n_lambdas
+                                     nlam=self.n_lambdas,
+                                     isd= normalize,
+                                     intr=include_intercept
+
                                  )
         else:
             X.sort_indices()
@@ -198,7 +202,9 @@ class ElasticNet(GlmNet):
                                     self.frac_lg_lambda, 
                                     self.lambdas, 
                                     self.threshold, 
-                                    nlam=self.n_lambdas
+                                    nlam=self.n_lambdas,
+                                    isd= normalize,
+                                    intr=include_intercept
                                 )
         self._check_errors()
         # The indexes into the predictor array are off by one due to fortran
